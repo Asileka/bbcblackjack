@@ -2,6 +2,7 @@ import { CCard } from "@coreui/react";
 import { CCardBody } from "@coreui/react";
 import { CCardTitle } from "@coreui/react";
 import { CCardText } from "@coreui/react";
+import { CButton } from "@coreui/react";
 import "@coreui/coreui/dist/css/coreui.min.css";
 function App() {
   let deck = [
@@ -9,35 +10,27 @@ function App() {
     { card: "5", suitsymbol: "♦", suit: "diamonds" },
     { card: "K", suitsymbol: "♣", suit: "clubs" },
   ];
-
+  const playerHand = [];
   function getRandomCard(deckOfCards) {
     const cardIndex = Math.floor(Math.random() * deckOfCards.length);
     const randomCard = deckOfCards[cardIndex];
+    playerHand.push(randomCard);
     deck.splice(cardIndex, 1);
     return randomCard;
   }
 
-  const firstCard = getRandomCard(deck);
-  deck.map((x, i) => {
-    if (x == firstCard) {
-      deck.splice(i, 1);
-    }
-  });
+  getRandomCard(deck);
+  getRandomCard(deck);
 
-  console.log(deck.length);
-  const secondCard = getRandomCard(deck);
-  deck.map((x, i) => {
-    if (x == secondCard) {
-      deck.splice(i, 1);
-    }
-  });
-  console.log(deck.length);
+  // function hit() {}
   return (
     <div className="App">
+      <CButton color="light">Hit</CButton>
+      <CButton color="light">Stand</CButton>
       <CCard style={{ width: "10rem" }}>
         <CCardBody>
           <CCardTitle>
-            {firstCard.card} {firstCard.suitsymbol}
+            {playerHand[0].card} {playerHand[0].suitsymbol}
           </CCardTitle>
           <CCardText>card</CCardText>
         </CCardBody>
@@ -45,7 +38,7 @@ function App() {
       <CCard style={{ width: "10rem" }}>
         <CCardBody>
           <CCardTitle>
-            {secondCard.card} {secondCard.suitsymbol}
+            {playerHand[1].card} {playerHand[1].suitsymbol}
           </CCardTitle>
           <CCardText>card</CCardText>
         </CCardBody>
