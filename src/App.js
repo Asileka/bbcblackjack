@@ -22,7 +22,8 @@ const calculateScore = (hand) =>
 function App() {
   const [playerHand, setPlayerHand] = useState([]);
   const [deck, setDeck] = useState(startDeck);
-
+  const [gameResult, setGameResult] = useState("");
+  const [disableStand, setDisableStand] = useState(false);
   function getRandomCard() {
     const cardIndex = Math.floor(Math.random() * deck.length);
     const randomCard = deck[cardIndex];
@@ -36,20 +37,38 @@ function App() {
     getRandomCard(deck);
   }
 
+  const score = calculateScore(playerHand);
+  let validHand = true;
+  if (score > 21) {
+    validHand = false;
+  }
   function hit() {
     getRandomCard(deck);
   }
-
-  const score = calculateScore(playerHand);
-
+  function stand() {
+    setDisableStand(true);
+    if (validHand) {
+      setGameResult("You Win!");
+    } else {
+      setGameResult("You Lose!");
+    }
+  }
   return (
     <div className="App">
-      <CButton color="light" onClick={hit} type="button">
+      <CButton color="light" onClick={hit} type="button" disabled={!validHand}>
         Hit
       </CButton>
-      <CButton color="light">Stand</CButton>
+      <CButton
+        color="light"
+        onClick={stand}
+        type="button"
+        disabled={disableStand}
+      >
+        Stand
+      </CButton>
+      <h1>{gameResult}</h1>
       <CCard
-        color="success"
+        color={validHand ? "success" : "danger"}
         textColor="white"
         className="mb-3"
         style={{ maxWidth: "5rem" }}
@@ -62,7 +81,7 @@ function App() {
       <div>
         {playerHand.map((x) => {
           return (
-            <CCard style={{ width: "10rem" }} key={x.id}>
+            <CCard style={{ width: "7rem" }} key={x.id}>
               <CCardBody>
                 <CCardTitle>
                   {x.card} {x.suitsymbol}
