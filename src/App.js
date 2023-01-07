@@ -3,7 +3,8 @@ import { CCardBody } from "@coreui/react";
 import { CCardTitle } from "@coreui/react";
 import { CCardText } from "@coreui/react";
 import { CButton } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
+import { cilCaretTop } from "@coreui/icons";
 import React, { useState } from "react";
 import "@coreui/coreui/dist/css/coreui.min.css";
 
@@ -57,6 +58,15 @@ function App() {
       setGameResult("Bust!");
     }
   }
+  function switchAceValue(i) {
+    let newPlayerHand = [...playerHand];
+    if (newPlayerHand[i].value === 1) {
+      newPlayerHand[i].value = 11;
+    } else {
+      newPlayerHand[i].value = 1;
+    }
+    setPlayerHand(newPlayerHand);
+  }
   return (
     <div className="App">
       <CButton color="light" onClick={hit} type="button" disabled={!validHand}>
@@ -90,14 +100,26 @@ function App() {
         </CCardBody>
       </CCard>
       <div>
-        {playerHand.map((x) => {
+        {playerHand.map((x, i) => {
           return (
             <CCard style={{ width: "7rem" }} key={x.id}>
               <CCardBody>
                 <CCardTitle>
                   {x.card} {x.suitsymbol}
                 </CCardTitle>
-                <CCardText>card</CCardText>
+                <CCardText>
+                  card
+                  {x.card === "A" ? (
+                    <CIcon
+                      icon={cilCaretTop}
+                      size="xl"
+                      type="button"
+                      onClick={() => switchAceValue(i)}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </CCardText>
               </CCardBody>
             </CCard>
           );
