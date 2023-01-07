@@ -3,6 +3,7 @@ import { CCardBody } from "@coreui/react";
 import { CCardTitle } from "@coreui/react";
 import { CCardText } from "@coreui/react";
 import { CButton } from "@coreui/react";
+import { CIcon } from "@coreui/icons-react";
 import React, { useState } from "react";
 import "@coreui/coreui/dist/css/coreui.min.css";
 
@@ -11,6 +12,8 @@ let startDeck = [
   { card: "5", suitsymbol: "♦", suit: "diamonds", id: 2, value: 5 },
   { card: "K", suitsymbol: "♣", suit: "clubs", id: 3, value: 10 },
   { card: "Q", suitsymbol: "♣", suit: "clubs", id: 4, value: 10 },
+  { card: "4", suitsymbol: "♥", suit: "hearts", id: 5, value: 4 },
+  { card: "A", suitsymbol: "♥", suit: "hearts", id: 6, value: 1 },
 ];
 
 const calculateScore = (hand) =>
@@ -23,7 +26,7 @@ function App() {
   const [playerHand, setPlayerHand] = useState([]);
   const [deck, setDeck] = useState(startDeck);
   const [gameResult, setGameResult] = useState("");
-  const [disableStand, setDisableStand] = useState(false);
+  const [gameEnd, setGameEnd] = useState(false);
   function getRandomCard() {
     const cardIndex = Math.floor(Math.random() * deck.length);
     const randomCard = deck[cardIndex];
@@ -38,6 +41,7 @@ function App() {
   }
 
   const score = calculateScore(playerHand);
+  let dealersScore = 17;
   let validHand = true;
   if (score > 21) {
     validHand = false;
@@ -46,11 +50,11 @@ function App() {
     getRandomCard(deck);
   }
   function stand() {
-    setDisableStand(true);
-    if (validHand) {
+    setGameEnd(true);
+    if (validHand && score > dealersScore) {
       setGameResult("You Win!");
     } else {
-      setGameResult("You Lose!");
+      setGameResult("Bust!");
     }
   }
   return (
@@ -58,22 +62,29 @@ function App() {
       <CButton color="light" onClick={hit} type="button" disabled={!validHand}>
         Hit
       </CButton>
-      <CButton
-        color="light"
-        onClick={stand}
-        type="button"
-        disabled={disableStand}
-      >
+      <CButton color="light" onClick={stand} type="button" disabled={gameEnd}>
         Stand
       </CButton>
       <h1>{gameResult}</h1>
+
+      <CCard
+        color="warning"
+        textColor="white"
+        className="mb-3"
+        style={{ maxWidth: "10rem" }}
+      >
+        <CCardHeader>Dealer's score:</CCardHeader>
+        <CCardBody>
+          <CCardTitle>{gameEnd ? dealersScore : "?"}</CCardTitle>
+        </CCardBody>
+      </CCard>
       <CCard
         color={validHand ? "success" : "danger"}
         textColor="white"
         className="mb-3"
-        style={{ maxWidth: "5rem" }}
+        style={{ maxWidth: "10rem" }}
       >
-        <CCardHeader>Score:</CCardHeader>
+        <CCardHeader>Your score:</CCardHeader>
         <CCardBody>
           <CCardTitle>{score}</CCardTitle>
         </CCardBody>
