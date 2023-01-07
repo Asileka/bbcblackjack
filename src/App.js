@@ -1,10 +1,10 @@
-import { CCard, CCardHeader } from "@coreui/react";
+import { CCard, CCardHeader, CRow, CCol, CContainer } from "@coreui/react";
 import { CCardBody } from "@coreui/react";
 import { CCardTitle } from "@coreui/react";
 import { CCardText } from "@coreui/react";
 import { CButton } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { cilCaretTop } from "@coreui/icons";
+import { cilChevronCircleUpAlt } from "@coreui/icons";
 import React, { useState } from "react";
 import "@coreui/coreui/dist/css/coreui.min.css";
 
@@ -26,7 +26,7 @@ const calculateScore = (hand) =>
 function App() {
   const [playerHand, setPlayerHand] = useState([]);
   const [deck, setDeck] = useState(startDeck);
-  const [gameResult, setGameResult] = useState("");
+  const [gameResult, setGameResult] = useState("Good Luck!");
   const [gameEnd, setGameEnd] = useState(false);
   function getRandomCard() {
     const cardIndex = Math.floor(Math.random() * deck.length);
@@ -55,7 +55,7 @@ function App() {
     if (validHand && score > dealersScore) {
       setGameResult("You Win!");
     } else {
-      setGameResult("Bust!");
+      setGameResult("You Lose!");
     }
   }
   function switchAceValue(i) {
@@ -68,64 +68,96 @@ function App() {
     setPlayerHand(newPlayerHand);
   }
   return (
-    <div className="App">
-      <CButton color="light" onClick={hit} type="button" disabled={!validHand}>
-        Hit
-      </CButton>
-      <CButton color="light" onClick={stand} type="button" disabled={gameEnd}>
-        Stand
-      </CButton>
-      <h1>{gameResult}</h1>
+    <CContainer>
+      <CRow>
+        <CCol className="text-center">
+          <h1>{gameResult}</h1>
+        </CCol>
+      </CRow>
+      <CRow className="justify-content-center">
+        <CCard
+          color="warning"
+          textColor="white"
+          className="text-center"
+          style={{ maxWidth: "10rem" }}
+        >
+          <CCardHeader>Dealer's score:</CCardHeader>
+          <CCardBody>
+            <CCardTitle>{gameEnd ? dealersScore : "?"}</CCardTitle>
+          </CCardBody>
+        </CCard>
+      </CRow>
+      <CRow className="justify-content-center mb-4">
+        <CCard
+          color={validHand ? "success" : "danger"}
+          textColor="white"
+          className="text-center"
+          style={{ maxWidth: "10rem" }}
+        >
+          <CCardHeader>Your score:</CCardHeader>
+          <CCardBody>
+            <CCardTitle>{score}</CCardTitle>
+          </CCardBody>
+        </CCard>
+      </CRow>
+      <CRow className="justify-content-center">
+        <CCol xs={1}>
+          <CButton
+            color="light"
+            onClick={hit}
+            type="button"
+            disabled={!validHand}
+          >
+            Hit
+          </CButton>
+        </CCol>
+        <CCol xs={1}>
+          <CButton
+            color="light"
+            onClick={stand}
+            type="button"
+            disabled={gameEnd}
+          >
+            Stand
+          </CButton>
+        </CCol>
+      </CRow>
 
-      <CCard
-        color="warning"
-        textColor="white"
-        className="mb-3"
-        style={{ maxWidth: "10rem" }}
-      >
-        <CCardHeader>Dealer's score:</CCardHeader>
-        <CCardBody>
-          <CCardTitle>{gameEnd ? dealersScore : "?"}</CCardTitle>
-        </CCardBody>
-      </CCard>
-      <CCard
-        color={validHand ? "success" : "danger"}
-        textColor="white"
-        className="mb-3"
-        style={{ maxWidth: "10rem" }}
-      >
-        <CCardHeader>Your score:</CCardHeader>
-        <CCardBody>
-          <CCardTitle>{score}</CCardTitle>
-        </CCardBody>
-      </CCard>
-      <div>
+      <CRow className="justify-content-center">
         {playerHand.map((x, i) => {
           return (
-            <CCard style={{ width: "7rem" }} key={x.id}>
+            <CCard
+              style={{ width: "7rem", height: "10rem", marginLeft: "1rem" }}
+              key={x.id}
+            >
               <CCardBody>
                 <CCardTitle>
                   {x.card} {x.suitsymbol}
                 </CCardTitle>
-                <CCardText>
-                  card
-                  {x.card === "A" ? (
-                    <CIcon
-                      icon={cilCaretTop}
-                      size="xl"
-                      type="button"
-                      onClick={() => switchAceValue(i)}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </CCardText>
+
+                {x.card === "A" ? (
+                  <CRow className="align-items-center">
+                    <CCol>
+                      <CCardText style={{ marginTop: "1.5rem" }}>
+                        {x.value}
+                        <CIcon
+                          icon={cilChevronCircleUpAlt}
+                          size="xl"
+                          type="button"
+                          onClick={() => switchAceValue(i)}
+                        />
+                      </CCardText>
+                    </CCol>
+                  </CRow>
+                ) : (
+                  <CCardText></CCardText>
+                )}
               </CCardBody>
             </CCard>
           );
         })}
-      </div>
-    </div>
+      </CRow>
+    </CContainer>
   );
 }
 
