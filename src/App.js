@@ -1,4 +1,4 @@
-import { CCard, CCardHeader, CRow, CCol, CContainer } from "@coreui/react";
+import { CCard, CRow, CCol, CContainer } from "@coreui/react";
 import { CCardBody } from "@coreui/react";
 import { CCardTitle } from "@coreui/react";
 import { CCardText } from "@coreui/react";
@@ -6,16 +6,9 @@ import { CButton } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilChevronCircleUpAlt } from "@coreui/icons";
 import React, { useState } from "react";
+import DealerCard from "./DealerCard";
+import startDeck from "./deck";
 import "@coreui/coreui/dist/css/coreui.min.css";
-
-let startDeck = [
-  { card: "2", suitsymbol: "♠", suit: "spades", id: 1, value: 2 },
-  { card: "5", suitsymbol: "♦", suit: "diamonds", id: 2, value: 5 },
-  { card: "K", suitsymbol: "♣", suit: "clubs", id: 3, value: 10 },
-  { card: "Q", suitsymbol: "♣", suit: "clubs", id: 4, value: 10 },
-  { card: "4", suitsymbol: "♥", suit: "hearts", id: 5, value: 4 },
-  { card: "A", suitsymbol: "♥", suit: "hearts", id: 6, value: 1 },
-];
 
 const calculateScore = (hand) =>
   hand.reduce(
@@ -84,32 +77,40 @@ function App() {
           <h1>{gameResult}</h1>
         </CCol>
       </CRow>
+      <CRow className="justify-content-center mb-4">
+        <DealerCard gameEnd={gameEnd} dealerCardName="7 ♣" />
+        <DealerCard gameEnd={gameEnd} dealerCardName="K ♦" />
+      </CRow>
       <CRow className="justify-content-center mb-2">
         <CCard
           color="warning"
           textColor="white"
           className="text-center"
-          style={{ maxWidth: "10rem" }}
+          style={{
+            maxWidth: "14rem",
+            maxHeight: "4rem",
+            marginRight: "1rem",
+          }}
         >
-          <CCardHeader>Dealer's score:</CCardHeader>
           <CCardBody>
-            <CCardTitle>{gameEnd ? dealersScore : "?"}</CCardTitle>
+            <CCardTitle>
+              Dealer's score: {gameEnd ? dealersScore : "?"}
+            </CCardTitle>
           </CCardBody>
         </CCard>
-      </CRow>
-      <CRow className="justify-content-center mb-2">
+
         <CCard
           color={validHand ? "success" : "danger"}
           textColor="white"
           className="text-center"
-          style={{ maxWidth: "10rem" }}
+          style={{ maxWidth: "14rem", maxHeight: "4rem" }}
         >
-          <CCardHeader>Your score:</CCardHeader>
           <CCardBody>
-            <CCardTitle>{score}</CCardTitle>
+            <CCardTitle>Your score: {score}</CCardTitle>
           </CCardBody>
         </CCard>
       </CRow>
+
       <CRow className="justify-content-center mb-2">
         <CCol xs={1}>
           <CButton
