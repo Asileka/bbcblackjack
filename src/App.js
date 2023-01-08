@@ -86,7 +86,7 @@ function App() {
       </CRow>
       <CRow className="justify-content-center">
         <CCol className="text-center">
-          <img src={catPicture} alt="cat dealer" height="270" />
+          <img src={catPicture} alt="cat dealer" height="260" />
         </CCol>
       </CRow>
       <CRow className="justify-content-center mb-4">
