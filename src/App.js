@@ -6,6 +6,9 @@ import { CButton } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilChevronCircleUpAlt } from "@coreui/icons";
 import React, { useState } from "react";
+import catdealerwaiting from "./images/catdealerwaiting.svg";
+import catdealerwon from "./images/catdealerwon.svg";
+import catdealershocked from "./images/catdealershocked.svg";
 import DealerCard from "./DealerCard";
 import startDeck from "./deck";
 import "@coreui/coreui/dist/css/coreui.min.css";
@@ -21,6 +24,7 @@ function App() {
   const [deck, setDeck] = useState(startDeck);
   const [gameResult, setGameResult] = useState("Good Luck!");
   const [gameEnd, setGameEnd] = useState(false);
+  const [catPicture, setCatPicture] = useState(catdealerwaiting);
   function getRandomCard() {
     const cardIndex = Math.floor(Math.random() * deck.length);
     const randomCard = deck[cardIndex];
@@ -47,8 +51,10 @@ function App() {
     setGameEnd(true);
     if (validHand && score > dealersScore) {
       setGameResult("You Win!");
+      setCatPicture(catdealershocked);
     } else {
       setGameResult("You Lose!");
+      setCatPicture(catdealerwon);
     }
   }
   function switchAceValue(i) {
@@ -64,6 +70,7 @@ function App() {
     setGameEnd(false);
     setPlayerHand([]);
     setDeck(startDeck);
+    setCatPicture(catdealerwaiting);
     setGameResult("Good Luck!");
     if (playerHand.length < 2) {
       getRandomCard(deck);
@@ -75,6 +82,11 @@ function App() {
       <CRow>
         <CCol className="text-center">
           <h1>{gameResult}</h1>
+        </CCol>
+      </CRow>
+      <CRow className="justify-content-center">
+        <CCol className="text-center">
+          <img src={catPicture} alt="cat dealer" height="270" />
         </CCol>
       </CRow>
       <CRow className="justify-content-center mb-4">
