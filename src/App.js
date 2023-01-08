@@ -67,6 +67,16 @@ function App() {
     }
     setPlayerHand(newPlayerHand);
   }
+  function playAgain() {
+    setGameEnd(false);
+    setPlayerHand([]);
+    setDeck(startDeck);
+    setGameResult("Good Luck!");
+    if (playerHand.length < 2) {
+      getRandomCard(deck);
+      getRandomCard(deck);
+    }
+  }
   return (
     <CContainer>
       <CRow>
@@ -74,7 +84,7 @@ function App() {
           <h1>{gameResult}</h1>
         </CCol>
       </CRow>
-      <CRow className="justify-content-center">
+      <CRow className="justify-content-center mb-2">
         <CCard
           color="warning"
           textColor="white"
@@ -87,7 +97,7 @@ function App() {
           </CCardBody>
         </CCard>
       </CRow>
-      <CRow className="justify-content-center mb-4">
+      <CRow className="justify-content-center mb-2">
         <CCard
           color={validHand ? "success" : "danger"}
           textColor="white"
@@ -100,13 +110,13 @@ function App() {
           </CCardBody>
         </CCard>
       </CRow>
-      <CRow className="justify-content-center">
+      <CRow className="justify-content-center mb-2">
         <CCol xs={1}>
           <CButton
             color="light"
             onClick={hit}
             type="button"
-            disabled={!validHand}
+            disabled={!validHand || gameEnd}
           >
             Hit
           </CButton>
@@ -121,6 +131,15 @@ function App() {
             Stand
           </CButton>
         </CCol>
+        {gameEnd ? (
+          <CCol xs={1}>
+            <CButton color="light" onClick={playAgain} type="button">
+              Play Again
+            </CButton>
+          </CCol>
+        ) : (
+          ""
+        )}
       </CRow>
 
       <CRow className="justify-content-center">
